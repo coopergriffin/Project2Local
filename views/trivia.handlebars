@@ -1,0 +1,23 @@
+<main>
+
+  <h2>Movie Trivia Game</h2>
+
+  <p>{{gameInfo.description}}</p>
+
+  <div class="movie-trivia">
+
+    {{#each gameInfo.movies as |movie|}}
+
+    <div class="movie">
+
+      <img src="{{movie.poster}}" alt="Movie Poster for {{movie.name}}" class="movie-poster">
+
+      <button class="movie-select-btn">{{movie.name}}</button>
+
+    </div>
+
+    {{/each}}
+
+  </div>
+
+</main>
