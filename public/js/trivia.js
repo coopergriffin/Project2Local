@@ -10,7 +10,7 @@ async function loadMovies() {
     console.log(movie);
     const movieElement = document.createElement('div');
     movieElement.innerHTML = `
-      <img src="${movie.poster}" alt="${movie.title}">
+      <img class="movie-poster" src="${movie.imageURL}" alt="${movie.title}">
       <button class="movie-select-btn" data-id="${movie.id}" data-year="${movie.releaseYear}">${movie.title}</button>
     `;
     moviesContainer.appendChild(movieElement);
@@ -59,7 +59,7 @@ async function updateScore(correct) {
   });
   const data = await response.json();
   if (data.highScore) {
-    document.getElementById('high-score').textContent = `Highscore: ${data.highScore}`;
+    document.getElementById('high-score').textContent = `${data.highScore}`;
   }
 }
 
@@ -69,7 +69,7 @@ async function fetchAndDisplayHighscore() {
   const data = await response.json();
   console.log("Data received from /api/users/highscore:", data); // Log the parsed data
   if (data.highScore) {
-    document.getElementById('high-score').textContent = `Highscore: ${data.highScore}`;
+    document.getElementById('high-score').textContent = `${data.highScore}`;
   } else {
     console.log("Highscore not found in the response data"); // Log if highScore is not present
   }
@@ -78,7 +78,13 @@ async function fetchAndDisplayHighscore() {
 document.addEventListener('DOMContentLoaded', () => {
   fetchAndDisplayHighscore();
   const startGameBtn = document.getElementById('start-game-btn');
-  startGameBtn.addEventListener('click', loadMovies);
+  startGameBtn.addEventListener('click', () => {
+
+    document.getElementById('current-score').textContent = '0'; // Reset score to 0
+
+    loadMovies();
+
+  });
 
   document.querySelector('.movie-trivia').addEventListener('click', (event) => {
     if (event.target.classList.contains('movie-select-btn')) {

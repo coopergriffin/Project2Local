@@ -12,9 +12,13 @@ router.post('/', async (req, res) => {
     });
 
     req.session.save(() => {
-      req.session.loggedIn = true;
 
-      res.status(200).json(dbUserData);
+      req.session.loggedIn = true;
+    
+      req.session.userId = dbUserData.id; // Ensure this line is present
+    
+      res.status(200).json({ user: dbUserData, message: 'You are now logged in!' });
+    
     });
   } catch (err) {
     console.log(err);
@@ -49,6 +53,7 @@ router.post('/login', async (req, res) => {
 
     req.session.save(() => {
       req.session.loggedIn = true;
+      req.session.userId = dbUserData.id;
 
       res
         .status(200)
@@ -112,6 +117,7 @@ router.get('/highscore', withAuth, async (req, res) => {
 
 router.post('/submit', withAuth, async (req, res) => {
   // Your existing logic remains here
+  console.log("!!!!");
   try {
     const userId = req.session.userId;
     const { currentScore } = req.body;
@@ -136,6 +142,8 @@ router.post('/submit', withAuth, async (req, res) => {
     res.status(500).json({ message: 'An error occurred while updating the high score', error: err.message });
   }
 });
+
+
 // Logout
 router.post('/logout', (req, res) => {
   if (req.session.loggedIn) {
