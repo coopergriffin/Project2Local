@@ -36,7 +36,7 @@ header {
 }
 
 main {
-  display: flex;
+  display: block;
   flex-wrap: wrap;
   flex-grow: 1;
 }
@@ -132,14 +132,15 @@ img {
 /* Additions for Movie Trivia Game layout */
 .movie-trivia {
   display: flex;
-  justify-content: center; /* Center the movies horizontally */
-  gap: 20px; /* Optional: adds some space between the two movies */
+  justify-content: flex-start; /* Aligns the movies to the left */
+  gap: 20px; /* Keeps the space between the movies */
+  flex-wrap: wrap; /* Allows movies to wrap to the next line if there's not enough space */
 }
 
 .movie {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Aligns the items vertically in the center */
+  align-items: flex-start; /* Aligns items to the left */
 }
 
 .movie img {
@@ -158,6 +159,16 @@ img {
 
 .movie-select-btn {
   /* Additional styling for the button if needed */
+}
+
+#start-game-btn {
+
+  font-size: 16px; /* Adjust font size as needed */
+
+  padding: 10px 20px; /* Adjust padding to control the size */
+
+  /* Add any other styling properties as needed */
+
 }
 
 .gallery {

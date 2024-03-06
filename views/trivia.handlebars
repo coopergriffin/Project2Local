@@ -1,16 +1,17 @@
 <main>
 
   <h2>Movie Trivia Game</h2>
-
+  
+  <button id="start-game-btn">Start Game</button>
   <p>{{gameInfo.description}}</p>
 
-  <!-- Score and Highscore Display -->
+  <!-- Add Score and Highscore Display -->
   <div class="score-container">
     <p>Score: <span id="current-score">{{gameInfo.score}}</span></p>
     <p>Highscore: <span id="high-score">{{gameInfo.highscore}}</span></p>
   </div>
 
-  <button id="start-game-btn">Start Game</button>
+  
 
   <div class="movie-trivia">
     {{#each gameInfo.movies as |movie|}}

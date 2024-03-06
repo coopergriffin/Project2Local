@@ -58,6 +58,7 @@ router.post('/submit', async (req, res) => {
 });
 
 // Route to get the high score of the logged-in user
+/*
 router.get('/users/highscore', async (req, res) => {
   if (!req.session.userId) {
     return res.status(403).json({ message: 'Not logged in' });
@@ -78,5 +79,6 @@ router.get('/users/highscore', async (req, res) => {
     res.status(500).json({ message: 'An error occurred while fetching the high score', error: err.message });
   }
 });
+*/
 
 module.exports = router;

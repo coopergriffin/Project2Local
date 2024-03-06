@@ -50,7 +50,7 @@ async function updateScore(correct) {
   document.getElementById('current-score').textContent = currentScore.toString();
 
   // Fetch and update highscore as needed
-  const response = await fetch('/api/movies/submit', {
+  const response = await fetch('/api/users/submit', { // Updated endpoint
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -65,11 +65,14 @@ async function updateScore(correct) {
 
 async function fetchAndDisplayHighscore() {
   const response = await fetch('/api/users/highscore');
+  console.log("Response from /api/users/highscore:", response); // Log the response object
   const data = await response.json();
+  console.log("Data received from /api/users/highscore:", data); // Log the parsed data
   if (data.highScore) {
     document.getElementById('high-score').textContent = `Highscore: ${data.highScore}`;
+  } else {
+    console.log("Highscore not found in the response data"); // Log if highScore is not present
   }
-  fetchAndDisplayHighscore();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
