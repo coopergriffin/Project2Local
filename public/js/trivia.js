@@ -21,7 +21,6 @@ async function selectMovie(event) {
   const selectedMovieId = event.target.getAttribute('data-id');
   const selectedMovieYear = parseInt(event.target.getAttribute('data-year'), 10);
 
-  // Fetch the other movie's year for comparison
   const otherMovieButton = [...document.querySelectorAll('.movie-select-btn')]
     .find(button => button.getAttribute('data-id') !== selectedMovieId);
   const otherMovieYear = parseInt(otherMovieButton.getAttribute('data-year'), 10);
@@ -31,38 +30,53 @@ async function selectMovie(event) {
 
   if (selectedMovieYear <= otherMovieYear) {
     alert('Correct! Loading new movies...');
-    // Increment score and update display
     updateScore(true);
     loadMovies(); // Reload new movies
   } else {
-    // Update display with final score before resetting
+    const currentScore = parseInt(document.getElementById('current-score').textContent) || 0;
+    alert(`Wrong! Game over. Your score was: ${currentScore}`);
     updateScore(false);
-    alert(`Wrong! Game over. Your score was: ${document.getElementById('current-score').textContent}`);
-    // Reset score and load new movies
     loadMovies(); // Start a new game
   }
 }
 
-function updateScore(correct) {
-  // This function should be implemented to update the score on the server-side
-  // and then fetch the updated score and highscore to update the UI.
-  // Placeholder implementation:
-  let currentScore = parseInt(document.getElementById('current-score').textContent) || 0;;
+async function updateScore(correct) {
+  let currentScore = parseInt(document.getElementById('current-score').textContent) || 0;
   if (correct) {
     currentScore += 1; // Increment score
   } else {
     currentScore = 0; // Reset score
   }
   document.getElementById('current-score').textContent = currentScore.toString();
+
   // Fetch and update highscore as needed
+  const response = await fetch('/api/movies/submit', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ correct, currentScore }),
+  });
+  const data = await response.json();
+  if (data.highScore) {
+    document.getElementById('high-score').textContent = `Highscore: ${data.highScore}`;
+  }
+}
+
+async function fetchAndDisplayHighscore() {
+  const response = await fetch('/api/users/highscore');
+  const data = await response.json();
+  if (data.highScore) {
+    document.getElementById('high-score').textContent = `Highscore: ${data.highScore}`;
+  }
+  fetchAndDisplayHighscore();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  fetchAndDisplayHighscore();
   const startGameBtn = document.getElementById('start-game-btn');
   startGameBtn.addEventListener('click', loadMovies);
-});
 
-document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('.movie-trivia').addEventListener('click', (event) => {
     if (event.target.classList.contains('movie-select-btn')) {
       selectMovie(event);
