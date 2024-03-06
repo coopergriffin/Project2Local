@@ -18,27 +18,32 @@ router.get('/random', async (req, res) => {
 
 // Submit user's choice and update score
 router.post('/submit', async (req, res) => {
-    const { selectedMovieId } = req.body;
-    try {
-      const selectedMovie = await Movie.findByPk(selectedMovieId);
-      // Assuming you send both movies' IDs and use the release year to check
-      if (selectedMovie.releaseYear === Math.min(req.body.firstMovieYear, req.body.secondMovieYear)) {
-        req.session.score = (req.session.score || 0) + 1; // Update score
-        // Check if the current score is higher than the user's high score
-        const user = await User.findByPk(req.session.userId);
-        if (req.session.score > user.highScore) {
-          user.highScore = req.session.score;
-          await user.save();
-          res.json({ correct: true, score: req.session.score, newHighScore: true });
-        } else {
-          res.json({ correct: true, score: req.session.score, newHighScore: false });
-        }
+  const { selectedMovieId, firstMovieYear, secondMovieYear } = req.body;
+  try {
+    const selectedMovie = await Movie.findByPk(selectedMovieId);
+    // Check if the selected movie's release year is the earliest
+    if (selectedMovie.releaseYear === Math.min(firstMovieYear, secondMovieYear)) {
+      // Correct choice, update score
+      req.session.score = (req.session.score || 0) + 1;
+      
+      // Fetch the user to update high score if necessary
+      const user = await User.findByPk(req.session.userId);
+      if (req.session.score > user.highScore) {
+        user.highScore = req.session.score;
+        await user.save();
+        res.json({ correct: true, score: req.session.score, highScore: user.highScore });
       } else {
-        res.json({ correct: false, score: req.session.score });
+        res.json({ correct: true, score: req.session.score, highScore: user.highScore });
       }
-    } catch (err) {
-      res.status(500).json(err);
+    } else {
+      // Incorrect choice, reset score but return the last score before resetting
+      const lastScore = req.session.score;
+      req.session.score = 0; // Reset score for a new game
+      res.json({ correct: false, score: lastScore, highScore: user.highScore });
     }
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 module.exports = router;
