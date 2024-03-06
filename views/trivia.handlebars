@@ -4,20 +4,23 @@
 
   <p>{{gameInfo.description}}</p>
 
+  <!-- Add Score and Highscore Display -->
+  <div class="score-container">
+    <p>Score: <span id="current-score">{{gameInfo.score}}</span></p>
+    <p>Highscore: <span id="high-score">{{gameInfo.highscore}}</span></p>
+  </div>
+
+  <button id="start-game-btn">Start Game</button>
+
   <div class="movie-trivia">
-
     {{#each gameInfo.movies as |movie|}}
-
     <div class="movie">
-
       <img src="{{movie.poster}}" alt="Movie Poster for {{movie.name}}" class="movie-poster">
-
       <button class="movie-select-btn">{{movie.name}}</button>
-
     </div>
-
     {{/each}}
-
   </div>
 
 </main>
+
+<script src="/js/trivia.js"></script>
