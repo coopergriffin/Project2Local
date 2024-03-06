@@ -16,7 +16,7 @@
     {{#each gameInfo.movies as |movie|}}
     <div class="movie">
       <img src="{{movie.poster}}" alt="Movie Poster for {{movie.name}}" class="movie-poster">
-      <button class="movie-select-btn">{{movie.name}}</button>
+      <button class="movie-select-btn" data-movie-id="{{movie.id}}">{{movie.name}}</button>
     </div>
     {{/each}}
   </div>
